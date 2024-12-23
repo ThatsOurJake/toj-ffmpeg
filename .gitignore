@@ -1,0 +1,5 @@
+# TEMP: Until i have ensured everything is there
+patch.diff 
+
+out/*
+.DS_Store

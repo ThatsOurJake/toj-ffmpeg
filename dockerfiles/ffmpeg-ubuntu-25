@@ -1,0 +1,71 @@
+FROM ubuntu:25.04
+
+RUN apt-get update -qq
+
+# Install dependencies
+RUN apt-get -y install \
+  autoconf \
+  automake \
+  build-essential \
+  cmake \
+  git-core \
+  libass-dev \
+  libfreetype6-dev \
+  libgnutls28-dev \
+  libmp3lame-dev \
+  libsdl2-dev \
+  libtool \
+  libva-dev \
+  libvdpau-dev \
+  libvorbis-dev \
+  libxcb1-dev \
+  libxcb-shm0-dev \
+  libxcb-xfixes0-dev \
+  meson \
+  ninja-build \
+  pkg-config \
+  texinfo \
+  wget \
+  yasm \
+  zlib1g-dev \
+  libx264-dev \
+  libopus-dev \
+  libfdk-aac-dev \
+  libunistring-dev \
+  libaom-dev \
+  libdav1d-dev
+
+WORKDIR /compile
+
+RUN mkdir -p /compile/ffmpeg_sources /compile/bin
+
+COPY ./ffmpeg /compile/ffmpeg_sources
+
+RUN PATH="/compile/bin:$PATH"
+RUN PKG_CONFIG_PATH="/compile/ffmpeg_build/lib/pkgconfig"
+
+WORKDIR /compile/ffmpeg_sources
+
+RUN ./configure \
+  --prefix="/compile/ffmpeg_build" \
+  --pkg-config-flags="--static" \
+  --extra-cflags="-I/compile/ffmpeg_build/include" \
+  --extra-ldflags="-L/compile/ffmpeg_build/lib" \
+  --extra-libs="-lpthread -lm" \
+  --ld="g++" \
+  --bindir="/compile/bin" \
+  --enable-gpl \
+  --enable-gnutls \
+  --enable-libaom \
+  --enable-libass \
+  --enable-libfdk-aac \
+  --enable-libfreetype \
+  --enable-libmp3lame \
+  --enable-libopus \
+  --enable-libvorbis \
+  --enable-libx264 \
+  --enable-nonfree
+
+RUN make -j$(nproc)
+RUN make install
+RUN hash -r
