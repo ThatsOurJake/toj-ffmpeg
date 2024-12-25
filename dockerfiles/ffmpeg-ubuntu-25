@@ -33,7 +33,8 @@ RUN apt-get -y install \
   libfdk-aac-dev \
   libunistring-dev \
   libaom-dev \
-  libdav1d-dev
+  libdav1d-dev \
+  nasm
 
 WORKDIR /compile
 

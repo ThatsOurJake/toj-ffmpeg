@@ -2,4 +2,9 @@
 patch.diff 
 
 out/*
+!out/.keep
+
 .DS_Store
+
+ffbuild
+ffmpeg_build

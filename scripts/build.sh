@@ -1,4 +1,5 @@
-# !/bin/bash
+#!/bin/bash
+set -e
 
 function build() {
   dockerfile=$1
